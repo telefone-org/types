@@ -69,7 +69,7 @@ class UpdateTypes:
     class PollUpdate(BaseBotUpdate, Poll):
         pass
 
-    class PreCheckoutQuery(BaseBotUpdate, PreCheckoutQuery):
+    class PreCheckoutQueryUpdate(BaseBotUpdate, PreCheckoutQuery):
         pass
 
     class ShippingQueryUpdate(BaseBotUpdate, ShippingQuery):
