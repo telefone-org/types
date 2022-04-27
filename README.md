@@ -1,6 +1,6 @@
 <h1 align="center">telefone-types</h1>
 
-<h3 align="center">Up-to-date types for Telefone framework</h3><br>
+<p align="center">Up-to-date types for Telefone framework</p>
 
 <p align="center">
     <a href="https://pypi.org/project/telefone-types">
