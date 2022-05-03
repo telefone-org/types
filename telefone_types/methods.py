@@ -5,8 +5,6 @@ from telefone_types.objects import *
 if typing.TYPE_CHECKING:
     from telefone.api.abc import ABCAPI
 
-X = typing.TypeVar("X")
-
 
 class APIMethods:
     def __init__(self, api: "ABCAPI"):
