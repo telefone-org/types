@@ -1,7 +1,7 @@
 import typing
 from pydantic import BaseModel
 
-from telefone_types.states import StatePeer, BaseStateGroup
+from telefone_types.states import StatePeer
 
 if typing.TYPE_CHECKING:
     from telefone.api import ABCAPI, API
