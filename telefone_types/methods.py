@@ -1,6 +1,6 @@
 import typing
 
-from telefone_types.objects import *
+from .objects import *
 
 if typing.TYPE_CHECKING:
     from telefone.api.abc import ABCAPI
@@ -29,48 +29,48 @@ class APIMethods:
     async def get_updates(
         self,
         offset: typing.Optional[int] = None,
-        limit: typing.Optional[int] = None,
+        limit: typing.Optional[int] = 100,
         timeout: typing.Optional[int] = None,
         allowed_updates: typing.Optional[typing.List[str]] = None,
         **kwargs
     ) -> typing.List["Update"]:
-        response = await self.api.request("getUpdates", self.get_params(locals()))
-        return response
+        result = await self.api.request("getUpdates", self.get_params(locals()))
+        return [Update(**self.get_response(u)) for u in result]
 
     async def set_webhook(
         self,
         url: typing.Optional[str] = None,
         certificate: typing.Optional["InputFile"] = None,
         ip_address: typing.Optional[str] = None,
-        max_connections: typing.Optional[int] = None,
+        max_connections: typing.Optional[int] = 40,
         allowed_updates: typing.Optional[typing.List[str]] = None,
         drop_pending_updates: typing.Optional[bool] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("setWebhook", self.get_params(locals()))
-        return response
+        result = await self.api.request("setWebhook", self.get_params(locals()))
+        return result
 
     async def delete_webhook(
         self, drop_pending_updates: typing.Optional[bool] = None, **kwargs
     ) -> bool:
-        response = await self.api.request("deleteWebhook", self.get_params(locals()))
-        return response
+        result = await self.api.request("deleteWebhook", self.get_params(locals()))
+        return result
 
     async def get_webhook_info(self, **kwargs) -> "WebhookInfo":
-        response = await self.api.request("getWebhookInfo", self.get_params(locals()))
-        return WebhookInfo(**self.get_response(response))
+        result = await self.api.request("getWebhookInfo", self.get_params(locals()))
+        return WebhookInfo(**self.get_response(result))
 
     async def get_me(self, **kwargs) -> "User":
-        response = await self.api.request("getMe", self.get_params(locals()))
-        return User(**self.get_response(response))
+        result = await self.api.request("getMe", self.get_params(locals()))
+        return User(**self.get_response(result))
 
     async def log_out(self, **kwargs) -> bool:
-        response = await self.api.request("logOut", self.get_params(locals()))
-        return response
+        result = await self.api.request("logOut", self.get_params(locals()))
+        return result
 
     async def close(self, **kwargs) -> bool:
-        response = await self.api.request("close", self.get_params(locals()))
-        return response
+        result = await self.api.request("close", self.get_params(locals()))
+        return result
 
     async def send_message(
         self,
@@ -93,8 +93,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendMessage", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendMessage", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def forward_message(
         self,
@@ -105,8 +105,8 @@ class APIMethods:
         message_id: typing.Optional[int] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("forwardMessage", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("forwardMessage", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def copy_message(
         self,
@@ -130,8 +130,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "MessageId":
-        response = await self.api.request("copyMessage", self.get_params(locals()))
-        return MessageId(**self.get_response(response))
+        result = await self.api.request("copyMessage", self.get_params(locals()))
+        return MessageId(**self.get_response(result))
 
     async def send_photo(
         self,
@@ -154,8 +154,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendPhoto", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendPhoto", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_audio(
         self,
@@ -182,8 +182,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendAudio", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendAudio", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_document(
         self,
@@ -208,8 +208,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendDocument", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendDocument", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_video(
         self,
@@ -237,8 +237,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendVideo", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendVideo", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_animation(
         self,
@@ -265,8 +265,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendAnimation", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendAnimation", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_voice(
         self,
@@ -290,8 +290,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendVoice", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendVoice", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_video_note(
         self,
@@ -314,8 +314,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendVideoNote", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendVideoNote", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_media_group(
         self,
@@ -336,8 +336,8 @@ class APIMethods:
         allow_sending_without_reply: typing.Optional[bool] = None,
         **kwargs
     ) -> typing.List["Message"]:
-        response = await self.api.request("sendMediaGroup", self.get_params(locals()))
-        return response
+        result = await self.api.request("sendMediaGroup", self.get_params(locals()))
+        return [Message(**self.get_response(m)) for m in result]
 
     async def send_location(
         self,
@@ -362,8 +362,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendLocation", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendLocation", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def edit_message_live_location(
         self,
@@ -378,10 +378,14 @@ class APIMethods:
         reply_markup: typing.Optional["InlineKeyboardMarkup"] = None,
         **kwargs
     ) -> typing.Union["Message", bool]:
-        response = await self.api.request(
+        result = await self.api.request(
             "editMessageLiveLocation", self.get_params(locals())
         )
-        return response
+
+        if isinstance(result, dict):
+            return Message(**self.get_response(result))
+
+        return result
 
     async def stop_message_live_location(
         self,
@@ -391,10 +395,14 @@ class APIMethods:
         reply_markup: typing.Optional["InlineKeyboardMarkup"] = None,
         **kwargs
     ) -> typing.Union["Message", bool]:
-        response = await self.api.request(
+        result = await self.api.request(
             "stopMessageLiveLocation", self.get_params(locals())
         )
-        return response
+
+        if isinstance(result, dict):
+            return Message(**self.get_response(result))
+
+        return result
 
     async def send_venue(
         self,
@@ -421,8 +429,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendVenue", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendVenue", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_contact(
         self,
@@ -445,16 +453,16 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendContact", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendContact", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_poll(
         self,
         chat_id: typing.Optional[typing.Union[int, str]] = None,
         question: typing.Optional[str] = None,
         options: typing.Optional[typing.List[str]] = None,
-        is_anonymous: typing.Optional[bool] = None,
-        type: typing.Optional[str] = None,
+        is_anonymous: typing.Optional[bool] = True,
+        type: typing.Optional[str] = "regular",
         allows_multiple_answers: typing.Optional[bool] = None,
         correct_option_id: typing.Optional[int] = None,
         explanation: typing.Optional[str] = None,
@@ -477,13 +485,13 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendPoll", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendPoll", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_dice(
         self,
         chat_id: typing.Optional[typing.Union[int, str]] = None,
-        emoji: typing.Optional[str] = None,
+        emoji: typing.Optional[str] = "🎲",
         disable_notification: typing.Optional[bool] = None,
         protect_content: typing.Optional[bool] = None,
         reply_to_message_id: typing.Optional[int] = None,
@@ -498,8 +506,8 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendDice", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendDice", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def send_chat_action(
         self,
@@ -507,24 +515,24 @@ class APIMethods:
         action: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("sendChatAction", self.get_params(locals()))
-        return response
+        result = await self.api.request("sendChatAction", self.get_params(locals()))
+        return result
 
     async def get_user_profile_photos(
         self,
         user_id: typing.Optional[int] = None,
         offset: typing.Optional[int] = None,
-        limit: typing.Optional[int] = None,
+        limit: typing.Optional[int] = 100,
         **kwargs
     ) -> "UserProfilePhotos":
-        response = await self.api.request(
+        result = await self.api.request(
             "getUserProfilePhotos", self.get_params(locals())
         )
-        return UserProfilePhotos(**self.get_response(response))
+        return UserProfilePhotos(**self.get_response(result))
 
     async def get_file(self, file_id: typing.Optional[str] = None, **kwargs) -> "File":
-        response = await self.api.request("getFile", self.get_params(locals()))
-        return File(**self.get_response(response))
+        result = await self.api.request("getFile", self.get_params(locals()))
+        return File(**self.get_response(result))
 
     async def ban_chat_member(
         self,
@@ -534,8 +542,8 @@ class APIMethods:
         revoke_messages: typing.Optional[bool] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("banChatMember", self.get_params(locals()))
-        return response
+        result = await self.api.request("banChatMember", self.get_params(locals()))
+        return result
 
     async def unban_chat_member(
         self,
@@ -544,8 +552,8 @@ class APIMethods:
         only_if_banned: typing.Optional[bool] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("unbanChatMember", self.get_params(locals()))
-        return response
+        result = await self.api.request("unbanChatMember", self.get_params(locals()))
+        return result
 
     async def restrict_chat_member(
         self,
@@ -555,10 +563,8 @@ class APIMethods:
         until_date: typing.Optional[int] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
-            "restrictChatMember", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("restrictChatMember", self.get_params(locals()))
+        return result
 
     async def promote_chat_member(
         self,
@@ -577,10 +583,8 @@ class APIMethods:
         can_pin_messages: typing.Optional[bool] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
-            "promoteChatMember", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("promoteChatMember", self.get_params(locals()))
+        return result
 
     async def set_chat_administrator_custom_title(
         self,
@@ -589,10 +593,10 @@ class APIMethods:
         custom_title: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "setChatAdministratorCustomTitle", self.get_params(locals())
         )
-        return response
+        return result
 
     async def ban_chat_sender_chat(
         self,
@@ -600,10 +604,8 @@ class APIMethods:
         sender_chat_id: typing.Optional[int] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
-            "banChatSenderChat", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("banChatSenderChat", self.get_params(locals()))
+        return result
 
     async def unban_chat_sender_chat(
         self,
@@ -611,10 +613,10 @@ class APIMethods:
         sender_chat_id: typing.Optional[int] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "unbanChatSenderChat", self.get_params(locals())
         )
-        return response
+        return result
 
     async def set_chat_permissions(
         self,
@@ -622,18 +624,16 @@ class APIMethods:
         permissions: typing.Optional["ChatPermissions"] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
-            "setChatPermissions", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("setChatPermissions", self.get_params(locals()))
+        return result
 
     async def export_chat_invite_link(
         self, chat_id: typing.Optional[typing.Union[int, str]] = None, **kwargs
     ) -> str:
-        response = await self.api.request(
+        result = await self.api.request(
             "exportChatInviteLink", self.get_params(locals())
         )
-        return response
+        return result
 
     async def create_chat_invite_link(
         self,
@@ -644,10 +644,10 @@ class APIMethods:
         creates_join_request: typing.Optional[bool] = None,
         **kwargs
     ) -> "ChatInviteLink":
-        response = await self.api.request(
+        result = await self.api.request(
             "createChatInviteLink", self.get_params(locals())
         )
-        return ChatInviteLink(**self.get_response(response))
+        return ChatInviteLink(**self.get_response(result))
 
     async def edit_chat_invite_link(
         self,
@@ -659,10 +659,8 @@ class APIMethods:
         creates_join_request: typing.Optional[bool] = None,
         **kwargs
     ) -> "ChatInviteLink":
-        response = await self.api.request(
-            "editChatInviteLink", self.get_params(locals())
-        )
-        return ChatInviteLink(**self.get_response(response))
+        result = await self.api.request("editChatInviteLink", self.get_params(locals()))
+        return ChatInviteLink(**self.get_response(result))
 
     async def revoke_chat_invite_link(
         self,
@@ -670,10 +668,10 @@ class APIMethods:
         invite_link: typing.Optional[str] = None,
         **kwargs
     ) -> "ChatInviteLink":
-        response = await self.api.request(
+        result = await self.api.request(
             "revokeChatInviteLink", self.get_params(locals())
         )
-        return ChatInviteLink(**self.get_response(response))
+        return ChatInviteLink(**self.get_response(result))
 
     async def approve_chat_join_request(
         self,
@@ -681,10 +679,10 @@ class APIMethods:
         user_id: typing.Optional[int] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "approveChatJoinRequest", self.get_params(locals())
         )
-        return response
+        return result
 
     async def decline_chat_join_request(
         self,
@@ -692,10 +690,10 @@ class APIMethods:
         user_id: typing.Optional[int] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "declineChatJoinRequest", self.get_params(locals())
         )
-        return response
+        return result
 
     async def set_chat_photo(
         self,
@@ -703,14 +701,14 @@ class APIMethods:
         photo: typing.Optional["InputFile"] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("setChatPhoto", self.get_params(locals()))
-        return response
+        result = await self.api.request("setChatPhoto", self.get_params(locals()))
+        return result
 
     async def delete_chat_photo(
         self, chat_id: typing.Optional[typing.Union[int, str]] = None, **kwargs
     ) -> bool:
-        response = await self.api.request("deleteChatPhoto", self.get_params(locals()))
-        return response
+        result = await self.api.request("deleteChatPhoto", self.get_params(locals()))
+        return result
 
     async def set_chat_title(
         self,
@@ -718,8 +716,8 @@ class APIMethods:
         title: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("setChatTitle", self.get_params(locals()))
-        return response
+        result = await self.api.request("setChatTitle", self.get_params(locals()))
+        return result
 
     async def set_chat_description(
         self,
@@ -727,10 +725,8 @@ class APIMethods:
         description: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
-            "setChatDescription", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("setChatDescription", self.get_params(locals()))
+        return result
 
     async def pin_chat_message(
         self,
@@ -739,8 +735,8 @@ class APIMethods:
         disable_notification: typing.Optional[bool] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("pinChatMessage", self.get_params(locals()))
-        return response
+        result = await self.api.request("pinChatMessage", self.get_params(locals()))
+        return result
 
     async def unpin_chat_message(
         self,
@@ -748,44 +744,42 @@ class APIMethods:
         message_id: typing.Optional[int] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("unpinChatMessage", self.get_params(locals()))
-        return response
+        result = await self.api.request("unpinChatMessage", self.get_params(locals()))
+        return result
 
     async def unpin_all_chat_messages(
         self, chat_id: typing.Optional[typing.Union[int, str]] = None, **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "unpinAllChatMessages", self.get_params(locals())
         )
-        return response
+        return result
 
     async def leave_chat(
         self, chat_id: typing.Optional[typing.Union[int, str]] = None, **kwargs
     ) -> bool:
-        response = await self.api.request("leaveChat", self.get_params(locals()))
-        return response
+        result = await self.api.request("leaveChat", self.get_params(locals()))
+        return result
 
     async def get_chat(
         self, chat_id: typing.Optional[typing.Union[int, str]] = None, **kwargs
     ) -> "Chat":
-        response = await self.api.request("getChat", self.get_params(locals()))
-        return Chat(**self.get_response(response))
+        result = await self.api.request("getChat", self.get_params(locals()))
+        return Chat(**self.get_response(result))
 
     async def get_chat_administrators(
         self, chat_id: typing.Optional[typing.Union[int, str]] = None, **kwargs
     ) -> typing.List["ChatMember"]:
-        response = await self.api.request(
+        result = await self.api.request(
             "getChatAdministrators", self.get_params(locals())
         )
-        return response
+        return [ChatMember(**self.get_response(c)) for c in result]
 
     async def get_chat_member_count(
         self, chat_id: typing.Optional[typing.Union[int, str]] = None, **kwargs
     ) -> int:
-        response = await self.api.request(
-            "getChatMemberCount", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("getChatMemberCount", self.get_params(locals()))
+        return result
 
     async def get_chat_member(
         self,
@@ -793,8 +787,8 @@ class APIMethods:
         user_id: typing.Optional[int] = None,
         **kwargs
     ) -> "ChatMember":
-        response = await self.api.request("getChatMember", self.get_params(locals()))
-        return ChatMember(**self.get_response(response))
+        result = await self.api.request("getChatMember", self.get_params(locals()))
+        return ChatMember(**self.get_response(result))
 
     async def set_chat_sticker_set(
         self,
@@ -802,18 +796,16 @@ class APIMethods:
         sticker_set_name: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
-            "setChatStickerSet", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("setChatStickerSet", self.get_params(locals()))
+        return result
 
     async def delete_chat_sticker_set(
         self, chat_id: typing.Optional[typing.Union[int, str]] = None, **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "deleteChatStickerSet", self.get_params(locals())
         )
-        return response
+        return result
 
     async def answer_callback_query(
         self,
@@ -824,10 +816,10 @@ class APIMethods:
         cache_time: typing.Optional[int] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "answerCallbackQuery", self.get_params(locals())
         )
-        return response
+        return result
 
     async def set_my_commands(
         self,
@@ -836,8 +828,8 @@ class APIMethods:
         language_code: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("setMyCommands", self.get_params(locals()))
-        return response
+        result = await self.api.request("setMyCommands", self.get_params(locals()))
+        return result
 
     async def delete_my_commands(
         self,
@@ -845,8 +837,8 @@ class APIMethods:
         language_code: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("deleteMyCommands", self.get_params(locals()))
-        return response
+        result = await self.api.request("deleteMyCommands", self.get_params(locals()))
+        return result
 
     async def get_my_commands(
         self,
@@ -854,8 +846,8 @@ class APIMethods:
         language_code: typing.Optional[str] = None,
         **kwargs
     ) -> typing.List["BotCommand"]:
-        response = await self.api.request("getMyCommands", self.get_params(locals()))
-        return response
+        result = await self.api.request("getMyCommands", self.get_params(locals()))
+        return [BotCommand(**self.get_response(b)) for b in result]
 
     async def set_chat_menu_button(
         self,
@@ -863,18 +855,14 @@ class APIMethods:
         menu_button: typing.Optional["MenuButton"] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
-            "setChatMenuButton", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("setChatMenuButton", self.get_params(locals()))
+        return result
 
     async def get_chat_menu_button(
         self, chat_id: typing.Optional[int] = None, **kwargs
     ) -> "MenuButton":
-        response = await self.api.request(
-            "getChatMenuButton", self.get_params(locals())
-        )
-        return MenuButton(**self.get_response(response))
+        result = await self.api.request("getChatMenuButton", self.get_params(locals()))
+        return MenuButton(**self.get_response(result))
 
     async def set_my_default_administrator_rights(
         self,
@@ -882,18 +870,18 @@ class APIMethods:
         for_channels: typing.Optional[bool] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "setMyDefaultAdministratorRights", self.get_params(locals())
         )
-        return response
+        return result
 
     async def get_my_default_administrator_rights(
         self, for_channels: typing.Optional[bool] = None, **kwargs
     ) -> "ChatAdministratorRights":
-        response = await self.api.request(
+        result = await self.api.request(
             "getMyDefaultAdministratorRights", self.get_params(locals())
         )
-        return ChatAdministratorRights(**self.get_response(response))
+        return ChatAdministratorRights(**self.get_response(result))
 
     async def edit_message_text(
         self,
@@ -907,8 +895,12 @@ class APIMethods:
         reply_markup: typing.Optional["InlineKeyboardMarkup"] = None,
         **kwargs
     ) -> typing.Union["Message", bool]:
-        response = await self.api.request("editMessageText", self.get_params(locals()))
-        return response
+        result = await self.api.request("editMessageText", self.get_params(locals()))
+
+        if isinstance(result, dict):
+            return Message(**self.get_response(result))
+
+        return result
 
     async def edit_message_caption(
         self,
@@ -921,10 +913,12 @@ class APIMethods:
         reply_markup: typing.Optional["InlineKeyboardMarkup"] = None,
         **kwargs
     ) -> typing.Union["Message", bool]:
-        response = await self.api.request(
-            "editMessageCaption", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("editMessageCaption", self.get_params(locals()))
+
+        if isinstance(result, dict):
+            return Message(**self.get_response(result))
+
+        return result
 
     async def edit_message_media(
         self,
@@ -935,8 +929,12 @@ class APIMethods:
         reply_markup: typing.Optional["InlineKeyboardMarkup"] = None,
         **kwargs
     ) -> typing.Union["Message", bool]:
-        response = await self.api.request("editMessageMedia", self.get_params(locals()))
-        return response
+        result = await self.api.request("editMessageMedia", self.get_params(locals()))
+
+        if isinstance(result, dict):
+            return Message(**self.get_response(result))
+
+        return result
 
     async def edit_message_reply_markup(
         self,
@@ -946,10 +944,14 @@ class APIMethods:
         reply_markup: typing.Optional["InlineKeyboardMarkup"] = None,
         **kwargs
     ) -> typing.Union["Message", bool]:
-        response = await self.api.request(
+        result = await self.api.request(
             "editMessageReplyMarkup", self.get_params(locals())
         )
-        return response
+
+        if isinstance(result, dict):
+            return Message(**self.get_response(result))
+
+        return result
 
     async def stop_poll(
         self,
@@ -958,8 +960,8 @@ class APIMethods:
         reply_markup: typing.Optional["InlineKeyboardMarkup"] = None,
         **kwargs
     ) -> "Poll":
-        response = await self.api.request("stopPoll", self.get_params(locals()))
-        return Poll(**self.get_response(response))
+        result = await self.api.request("stopPoll", self.get_params(locals()))
+        return Poll(**self.get_response(result))
 
     async def delete_message(
         self,
@@ -967,8 +969,8 @@ class APIMethods:
         message_id: typing.Optional[int] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("deleteMessage", self.get_params(locals()))
-        return response
+        result = await self.api.request("deleteMessage", self.get_params(locals()))
+        return result
 
     async def send_sticker(
         self,
@@ -988,14 +990,14 @@ class APIMethods:
         ] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendSticker", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendSticker", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def get_sticker_set(
         self, name: typing.Optional[str] = None, **kwargs
     ) -> "StickerSet":
-        response = await self.api.request("getStickerSet", self.get_params(locals()))
-        return StickerSet(**self.get_response(response))
+        result = await self.api.request("getStickerSet", self.get_params(locals()))
+        return StickerSet(**self.get_response(result))
 
     async def upload_sticker_file(
         self,
@@ -1003,10 +1005,8 @@ class APIMethods:
         png_sticker: typing.Optional["InputFile"] = None,
         **kwargs
     ) -> "File":
-        response = await self.api.request(
-            "uploadStickerFile", self.get_params(locals())
-        )
-        return File(**self.get_response(response))
+        result = await self.api.request("uploadStickerFile", self.get_params(locals()))
+        return File(**self.get_response(result))
 
     async def create_new_sticker_set(
         self,
@@ -1021,10 +1021,10 @@ class APIMethods:
         mask_position: typing.Optional["MaskPosition"] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "createNewStickerSet", self.get_params(locals())
         )
-        return response
+        return result
 
     async def add_sticker_to_set(
         self,
@@ -1037,8 +1037,8 @@ class APIMethods:
         mask_position: typing.Optional["MaskPosition"] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request("addStickerToSet", self.get_params(locals()))
-        return response
+        result = await self.api.request("addStickerToSet", self.get_params(locals()))
+        return result
 
     async def set_sticker_position_in_set(
         self,
@@ -1046,18 +1046,18 @@ class APIMethods:
         position: typing.Optional[int] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "setStickerPositionInSet", self.get_params(locals())
         )
-        return response
+        return result
 
     async def delete_sticker_from_set(
         self, sticker: typing.Optional[str] = None, **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "deleteStickerFromSet", self.get_params(locals())
         )
-        return response
+        return result
 
     async def set_sticker_set_thumb(
         self,
@@ -1066,26 +1066,22 @@ class APIMethods:
         thumb: typing.Optional[typing.Union["InputFile", str]] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
-            "setStickerSetThumb", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("setStickerSetThumb", self.get_params(locals()))
+        return result
 
     async def answer_inline_query(
         self,
         inline_query_id: typing.Optional[str] = None,
         results: typing.Optional[typing.List["InlineQueryResult"]] = None,
-        cache_time: typing.Optional[int] = None,
+        cache_time: typing.Optional[int] = 300,
         is_personal: typing.Optional[bool] = None,
         next_offset: typing.Optional[str] = None,
         switch_pm_text: typing.Optional[str] = None,
         switch_pm_parameter: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
-            "answerInlineQuery", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("answerInlineQuery", self.get_params(locals()))
+        return result
 
     async def answer_web_app_query(
         self,
@@ -1093,10 +1089,8 @@ class APIMethods:
         result: typing.Optional["InlineQueryResult"] = None,
         **kwargs
     ) -> "SentWebAppMessage":
-        response = await self.api.request(
-            "answerWebAppQuery", self.get_params(locals())
-        )
-        return SentWebAppMessage(**self.get_response(response))
+        result = await self.api.request("answerWebAppQuery", self.get_params(locals()))
+        return SentWebAppMessage(**self.get_response(result))
 
     async def send_invoice(
         self,
@@ -1129,8 +1123,8 @@ class APIMethods:
         reply_markup: typing.Optional["InlineKeyboardMarkup"] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendInvoice", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendInvoice", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def answer_shipping_query(
         self,
@@ -1140,10 +1134,10 @@ class APIMethods:
         error_message: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "answerShippingQuery", self.get_params(locals())
         )
-        return response
+        return result
 
     async def answer_pre_checkout_query(
         self,
@@ -1152,10 +1146,10 @@ class APIMethods:
         error_message: typing.Optional[str] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "answerPreCheckoutQuery", self.get_params(locals())
         )
-        return response
+        return result
 
     async def set_passport_data_errors(
         self,
@@ -1163,10 +1157,10 @@ class APIMethods:
         errors: typing.Optional[typing.List["PassportElementError"]] = None,
         **kwargs
     ) -> bool:
-        response = await self.api.request(
+        result = await self.api.request(
             "setPassportDataErrors", self.get_params(locals())
         )
-        return response
+        return result
 
     async def send_game(
         self,
@@ -1179,8 +1173,8 @@ class APIMethods:
         reply_markup: typing.Optional["InlineKeyboardMarkup"] = None,
         **kwargs
     ) -> "Message":
-        response = await self.api.request("sendGame", self.get_params(locals()))
-        return Message(**self.get_response(response))
+        result = await self.api.request("sendGame", self.get_params(locals()))
+        return Message(**self.get_response(result))
 
     async def set_game_score(
         self,
@@ -1193,8 +1187,12 @@ class APIMethods:
         inline_message_id: typing.Optional[str] = None,
         **kwargs
     ) -> typing.Union["Message", bool]:
-        response = await self.api.request("setGameScore", self.get_params(locals()))
-        return response
+        result = await self.api.request("setGameScore", self.get_params(locals()))
+
+        if isinstance(result, dict):
+            return Message(**self.get_response(result))
+
+        return result
 
     async def get_game_high_scores(
         self,
@@ -1204,7 +1202,5 @@ class APIMethods:
         inline_message_id: typing.Optional[str] = None,
         **kwargs
     ) -> typing.List["GameHighScore"]:
-        response = await self.api.request(
-            "getGameHighScores", self.get_params(locals())
-        )
-        return response
+        result = await self.api.request("getGameHighScores", self.get_params(locals()))
+        return [GameHighScore(**self.get_response(g)) for g in result]
