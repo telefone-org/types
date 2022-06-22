@@ -7,10 +7,7 @@
         <img src="https://img.shields.io/pypi/v/telefone_types?label=Current version&style=flat-square">
     </a>
     <a href="https://core.telegram.org/bots/api">
-        <img src="https://img.shields.io/badge/API%20coverage-Up%20to%206.0%20(inclusively)-red.svg?style=flat-square">
-    </a>
-    <a href="https://github.com/telefone-org/types/blob/main/LICENSE">
-        <img src="https://img.shields.io/pypi/l/telefone-types?label=License&style=flat-square">
+        <img src="https://img.shields.io/badge/API%20coverage-Up%20to%206.1%20-red.svg?style=flat-square">
     </a>
 </p>
 
@@ -36,5 +33,3 @@ To support our work, you can:
 - send a PR
 
 We are always glad to see your support, so you can open an issue or make a PR in case you noticed something went wrong. Thank you!
-
-
