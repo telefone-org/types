@@ -188,3 +188,19 @@ class PollAnswerUpdate(BaseBotUpdate, PollAnswer):
 class PollUpdate(BaseBotUpdate, Poll):
     def get_state_key(self) -> Optional[int]:
         return None
+
+
+__all__ = (
+    "BaseBotUpdate",
+    "MessageUpdate",
+    "CallbackQueryUpdate",
+    "InlineQueryUpdate",
+    "ChatJoinRequestUpdate",
+    "ChatMemberUpdate",
+    "ChosenInlineResultUpdate",
+    "MyChatMemberUpdate",
+    "PreCheckoutQueryUpdate",
+    "ShippingQueryUpdate",
+    "PollAnswerUpdate",
+    "PollUpdate",
+)
