@@ -1,15 +1,23 @@
 from enum import Enum
+from typing import List, Optional, Union
+from telefone_types.methods import APIMethods
 
 from telefone_types.objects import (
     CallbackQuery,
     ChatJoinRequest,
     ChatMemberUpdated,
     ChosenInlineResult,
+    ForceReply,
+    InlineKeyboardMarkup,
     InlineQuery,
+    InlineQueryResult,
     Message,
+    MessageEntity,
     Poll,
     PollAnswer,
     PreCheckoutQuery,
+    ReplyKeyboardMarkup,
+    ReplyKeyboardRemove,
     ShippingQuery,
 )
 from telefone_types.updates.base import BaseBotUpdate
@@ -32,45 +40,151 @@ class BotUpdateType(Enum):
     CHAT_JOIN_REQUEST = "chat_join_request"
 
 
-class UpdateTypes:
-    class CallbackQueryUpdate(BaseBotUpdate, CallbackQuery):
-        pass
+class MessageUpdate(BaseBotUpdate, Message):
+    async def answer(
+        self,
+        text: Optional[str] = None,
+        parse_mode: Optional[str] = None,
+        entities: Optional[List["MessageEntity"]] = None,
+        disable_web_page_preview: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        protect_content: Optional[bool] = None,
+        reply_to_message_id: Optional[int] = None,
+        allow_sending_without_reply: Optional[bool] = None,
+        reply_markup: Optional[
+            Union[
+                "InlineKeyboardMarkup",
+                "ReplyKeyboardMarkup",
+                "ReplyKeyboardRemove",
+                "ForceReply",
+            ]
+        ] = None,
+        **kwargs
+    ) -> Message:
+        params = APIMethods.get_params(locals())
+        return await self.ctx_api.send_message(chat_id=self.chat.id, **params)
 
-    class ChatJoinRequestUpdate(BaseBotUpdate, ChatJoinRequest):
-        pass
+    async def reply(
+        self,
+        text: Optional[str] = None,
+        parse_mode: Optional[str] = None,
+        entities: Optional[List["MessageEntity"]] = None,
+        disable_web_page_preview: Optional[bool] = None,
+        disable_notification: Optional[bool] = None,
+        protect_content: Optional[bool] = None,
+        allow_sending_without_reply: Optional[bool] = None,
+        reply_markup: Optional[
+            Union[
+                "InlineKeyboardMarkup",
+                "ReplyKeyboardMarkup",
+                "ReplyKeyboardRemove",
+                "ForceReply",
+            ]
+        ] = None,
+        **kwargs
+    ) -> Message:
+        params = APIMethods.get_params(locals())
+        return await self.ctx_api.send_message(
+            chat_id=self.chat.id, reply_to_message_id=self.message_id, **params
+        )
 
-    class ChatMemberUpdate(BaseBotUpdate, ChatMemberUpdated):
-        pass
+    async def forward(
+        self,
+        chat_id: Union[int, str],
+        disable_notification: Optional[bool] = None,
+        protect_content: Optional[bool] = None,
+        **kwargs
+    ) -> Message:
+        params = APIMethods.get_params(locals())
+        return await self.ctx_api.forward_message(
+            from_chat_id=self.chat.id, message_id=self.message_id, **params
+        )
 
-    class ChosenInlineResultUpdate(BaseBotUpdate, ChosenInlineResult):
-        pass
+    def get_state_key(self) -> Optional[int]:
+        return self.from_.id
 
-    class InlineQueryUpdate(BaseBotUpdate, InlineQuery):
-        pass
 
-    class MessageUpdate(BaseBotUpdate, Message):
-        pass
+class CallbackQueryUpdate(BaseBotUpdate, CallbackQuery):
+    async def answer(
+        self,
+        text: Optional[str] = None,
+        show_alert: Optional[bool] = None,
+        url: Optional[str] = None,
+        cache_time: Optional[int] = None,
+        **kwargs
+    ) -> bool:
+        params = APIMethods.get_params(locals())
+        return await self.ctx_api.answer_callback_query(self.id, **params)
 
-    class EditedMessageUpdate(BaseBotUpdate, Message):
-        pass
+    def get_state_key(self) -> Optional[int]:
+        return self.from_.id
 
-    class ChannelPostUpdate(BaseBotUpdate, Message):
-        pass
 
-    class EditedChannelPostUpdate(BaseBotUpdate, Message):
-        pass
+class InlineQueryUpdate(BaseBotUpdate, InlineQuery):
+    async def answer(
+        self,
+        results: Optional[List["InlineQueryResult"]] = None,
+        cache_time: Optional[int] = 300,
+        is_personal: Optional[bool] = None,
+        next_offset: Optional[str] = None,
+        switch_pm_text: Optional[str] = None,
+        switch_pm_parameter: Optional[str] = None,
+        **kwargs
+    ) -> bool:
+        params = APIMethods.get_params(locals())
+        return await self.ctx_api.answer_inline_query(self.id, **params)
 
-    class MyChatMemberUpdate(BaseBotUpdate, ChatMemberUpdated):
-        pass
+    def get_state_key(self) -> Optional[int]:
+        return self.from_.id
 
-    class PollAnswerUpdate(BaseBotUpdate, PollAnswer):
-        pass
 
-    class PollUpdate(BaseBotUpdate, Poll):
-        pass
+class ChatJoinRequestUpdate(BaseBotUpdate, ChatJoinRequest):
+    async def approve(self, **kwargs) -> bool:
+        params = APIMethods.get_params(locals())
+        return await self.ctx_api.approve_chat_join_request(
+            chat_id=self.chat.id, user_id=self.from_.id, **params
+        )
 
-    class PreCheckoutQueryUpdate(BaseBotUpdate, PreCheckoutQuery):
-        pass
+    async def decline(self, **kwargs) -> bool:
+        params = APIMethods.get_params(locals())
+        return await self.ctx_api.decline_chat_join_request(
+            chat_id=self.chat.id, user_id=self.from_.id, **params
+        )
 
-    class ShippingQueryUpdate(BaseBotUpdate, ShippingQuery):
-        pass
+    def get_state_key(self) -> Optional[int]:
+        return self.from_.id
+
+
+class ChatMemberUpdate(BaseBotUpdate, ChatMemberUpdated):
+    def get_state_key(self) -> Optional[int]:
+        return self.from_.id
+
+
+class ChosenInlineResultUpdate(BaseBotUpdate, ChosenInlineResult):
+    def get_state_key(self) -> Optional[int]:
+        return self.from_.id
+
+
+class MyChatMemberUpdate(BaseBotUpdate, ChatMemberUpdated):
+    def get_state_key(self) -> Optional[int]:
+        return self.from_.id
+
+
+class PreCheckoutQueryUpdate(BaseBotUpdate, PreCheckoutQuery):
+    def get_state_key(self) -> Optional[int]:
+        return self.from_.id
+
+
+class ShippingQueryUpdate(BaseBotUpdate, ShippingQuery):
+    def get_state_key(self) -> Optional[int]:
+        return self.from_.id
+
+
+class PollAnswerUpdate(BaseBotUpdate, PollAnswer):
+    def get_state_key(self) -> Optional[int]:
+        return self.user.id
+
+
+class PollUpdate(BaseBotUpdate, Poll):
+    def get_state_key(self) -> Optional[int]:
+        return None
