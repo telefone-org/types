@@ -652,28 +652,12 @@ class ChatAdministratorRights(BaseModel):
     can_pin_messages: Optional[bool] = Field(default=None)
 
 
-class ChatMember(BaseModel):
-    """
-    This object contains information about one member of a chat. Currently, the
-    following 6 types of chat members are supported:  ChatMemberOwner
-    ChatMemberAdministrator ChatMemberMember ChatMemberRestricted ChatMemberLeft
-    ChatMemberBanned
-    """
-
-    class Config:
-        # This model can morph into one of its variants.
-        # Pydantic doesn't support this at the moment,
-        # so this is a workaround. It allows to assign all
-        # attributes to the model without type validation.
-        extra = "allow"
-
-
 class ChatMemberOwner(BaseModel):
     """
     Represents a chat member that owns the chat and has all administrator privileges.
     """
 
-    status: Optional[str] = Field(default=None)
+    status: Optional[Literal["creator"]] = Field(default=None)
     user: Optional["User"] = Field(default=None)
     is_anonymous: Optional[bool] = Field(default=None)
     custom_title: Optional[str] = Field(default=None)
@@ -684,7 +668,7 @@ class ChatMemberAdministrator(BaseModel):
     Represents a chat member that has some additional privileges.
     """
 
-    status: Optional[str] = Field(default=None)
+    status: Optional[Literal["administrator"]] = Field(default=None)
     user: Optional["User"] = Field(default=None)
     can_be_edited: Optional[bool] = Field(default=None)
     is_anonymous: Optional[bool] = Field(default=None)
@@ -706,7 +690,7 @@ class ChatMemberMember(BaseModel):
     Represents a chat member that has no additional privileges or restrictions.
     """
 
-    status: Optional[str] = Field(default=None)
+    status: Optional[Literal["member"]] = Field(default=None)
     user: Optional["User"] = Field(default=None)
 
 
@@ -716,7 +700,7 @@ class ChatMemberRestricted(BaseModel):
     only.
     """
 
-    status: Optional[str] = Field(default=None)
+    status: Optional[Literal["restricted"]] = Field(default=None)
     user: Optional["User"] = Field(default=None)
     is_member: Optional[bool] = Field(default=None)
     can_change_info: Optional[bool] = Field(default=None)
@@ -736,7 +720,7 @@ class ChatMemberLeft(BaseModel):
     themselves.
     """
 
-    status: Optional[str] = Field(default=None)
+    status: Optional[Literal["left"]] = Field(default=None)
     user: Optional["User"] = Field(default=None)
 
 
@@ -746,7 +730,7 @@ class ChatMemberBanned(BaseModel):
     view chat messages.
     """
 
-    status: Optional[str] = Field(default=None)
+    status: Optional[Literal["kicked"]] = Field(default=None)
     user: Optional["User"] = Field(default=None)
     until_date: Optional[int] = Field(default=None)
 
@@ -809,30 +793,13 @@ class BotCommand(BaseModel):
     description: Optional[str] = Field(default=None)
 
 
-class BotCommandScope(BaseModel):
-    """
-    This object represents the scope to which bot commands are applied. Currently, the
-    following 7 scopes are supported:  BotCommandScopeDefault
-    BotCommandScopeAllPrivateChats BotCommandScopeAllGroupChats
-    BotCommandScopeAllChatAdministrators BotCommandScopeChat
-    BotCommandScopeChatAdministrators BotCommandScopeChatMember
-    """
-
-    class Config:
-        # This model can morph into one of its variants.
-        # Pydantic doesn't support this at the moment,
-        # so this is a workaround. It allows to assign all
-        # attributes to the model without type validation.
-        extra = "allow"
-
-
 class BotCommandScopeDefault(BaseModel):
     """
     Represents the default scope of bot commands. Default commands are used if no
     commands with a narrower scope are specified for the user.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["default"]] = Field(default=None)
 
 
 class BotCommandScopeAllPrivateChats(BaseModel):
@@ -840,7 +807,7 @@ class BotCommandScopeAllPrivateChats(BaseModel):
     Represents the scope of bot commands, covering all private chats.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["all_private_chats"]] = Field(default=None)
 
 
 class BotCommandScopeAllGroupChats(BaseModel):
@@ -848,7 +815,7 @@ class BotCommandScopeAllGroupChats(BaseModel):
     Represents the scope of bot commands, covering all group and supergroup chats.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["all_group_chats"]] = Field(default=None)
 
 
 class BotCommandScopeAllChatAdministrators(BaseModel):
@@ -857,7 +824,7 @@ class BotCommandScopeAllChatAdministrators(BaseModel):
     administrators.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["all_chat_administrators"]] = Field(default=None)
 
 
 class BotCommandScopeChat(BaseModel):
@@ -865,7 +832,7 @@ class BotCommandScopeChat(BaseModel):
     Represents the scope of bot commands, covering a specific chat.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["chat"]] = Field(default=None)
     chat_id: Optional[Union[int, str]] = Field(default=None)
 
 
@@ -875,7 +842,7 @@ class BotCommandScopeChatAdministrators(BaseModel):
     group or supergroup chat.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["chat_administrators"]] = Field(default=None)
     chat_id: Optional[Union[int, str]] = Field(default=None)
 
 
@@ -885,23 +852,9 @@ class BotCommandScopeChatMember(BaseModel):
     supergroup chat.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["chat_member"]] = Field(default=None)
     chat_id: Optional[Union[int, str]] = Field(default=None)
     user_id: Optional[int] = Field(default=None)
-
-
-class MenuButton(BaseModel):
-    """
-    This object describes the bot's menu button in a private chat. It should be one of
-    MenuButtonCommands MenuButtonWebApp MenuButtonDefault
-    """
-
-    class Config:
-        # This model can morph into one of its variants.
-        # Pydantic doesn't support this at the moment,
-        # so this is a workaround. It allows to assign all
-        # attributes to the model without type validation.
-        extra = "allow"
 
 
 class MenuButtonCommands(BaseModel):
@@ -909,7 +862,7 @@ class MenuButtonCommands(BaseModel):
     Represents a menu button, which opens the bot's list of commands.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["commands"]] = Field(default=None)
 
 
 class MenuButtonWebApp(BaseModel):
@@ -917,7 +870,7 @@ class MenuButtonWebApp(BaseModel):
     Represents a menu button, which launches a Web App.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["web_app"]] = Field(default=None)
     text: Optional[str] = Field(default=None)
     web_app: Optional["WebAppInfo"] = Field(default=None)
 
@@ -927,7 +880,7 @@ class MenuButtonDefault(BaseModel):
     Describes that no specific value for the menu button was set.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["default"]] = Field(default=None)
 
 
 class ResponseParameters(BaseModel):
@@ -939,27 +892,12 @@ class ResponseParameters(BaseModel):
     retry_after: Optional[int] = Field(default=None)
 
 
-class InputMedia(BaseModel):
-    """
-    This object represents the content of a media message to be sent. It should be one
-    of  InputMediaAnimation InputMediaDocument InputMediaAudio InputMediaPhoto
-    InputMediaVideo
-    """
-
-    class Config:
-        # This model can morph into one of its variants.
-        # Pydantic doesn't support this at the moment,
-        # so this is a workaround. It allows to assign all
-        # attributes to the model without type validation.
-        extra = "allow"
-
-
 class InputMediaPhoto(BaseModel):
     """
     Represents a photo to be sent.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["photo"]] = Field(default=None)
     media: Optional[str] = Field(default=None)
     caption: Optional[str] = Field(default=None)
     parse_mode: Optional[str] = Field(default=None)
@@ -971,7 +909,7 @@ class InputMediaVideo(BaseModel):
     Represents a video to be sent.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["video"]] = Field(default=None)
     media: Optional[str] = Field(default=None)
     thumb: Optional[Union["InputFile", str]] = Field(default=None)
     caption: Optional[str] = Field(default=None)
@@ -989,7 +927,7 @@ class InputMediaAnimation(BaseModel):
     sent.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["animation"]] = Field(default=None)
     media: Optional[str] = Field(default=None)
     thumb: Optional[Union["InputFile", str]] = Field(default=None)
     caption: Optional[str] = Field(default=None)
@@ -1005,7 +943,7 @@ class InputMediaAudio(BaseModel):
     Represents an audio file to be treated as music to be sent.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["audio"]] = Field(default=None)
     media: Optional[str] = Field(default=None)
     thumb: Optional[Union["InputFile", str]] = Field(default=None)
     caption: Optional[str] = Field(default=None)
@@ -1021,7 +959,7 @@ class InputMediaDocument(BaseModel):
     Represents a general file to be sent.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["document"]] = Field(default=None)
     media: Optional[str] = Field(default=None)
     thumb: Optional[Union["InputFile", str]] = Field(default=None)
     caption: Optional[str] = Field(default=None)
@@ -1100,34 +1038,12 @@ class InlineQuery(BaseModel):
     location: Optional["Location"] = Field(default=None)
 
 
-class InlineQueryResult(BaseModel):
-    """
-    This object represents one result of an inline query. Telegram clients currently
-    support results of the following 20 types:  InlineQueryResultCachedAudio
-    InlineQueryResultCachedDocument InlineQueryResultCachedGif
-    InlineQueryResultCachedMpeg4Gif InlineQueryResultCachedPhoto
-    InlineQueryResultCachedSticker InlineQueryResultCachedVideo
-    InlineQueryResultCachedVoice InlineQueryResultArticle InlineQueryResultAudio
-    InlineQueryResultContact InlineQueryResultGame InlineQueryResultDocument
-    InlineQueryResultGif InlineQueryResultLocation InlineQueryResultMpeg4Gif
-    InlineQueryResultPhoto InlineQueryResultVenue InlineQueryResultVideo
-    InlineQueryResultVoice
-    """
-
-    class Config:
-        # This model can morph into one of its variants.
-        # Pydantic doesn't support this at the moment,
-        # so this is a workaround. It allows to assign all
-        # attributes to the model without type validation.
-        extra = "allow"
-
-
 class InlineQueryResultArticle(BaseModel):
     """
     Represents a link to an article or web page.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["article"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
     input_message_content: Optional["InputMessageContent"] = Field(default=None)
@@ -1147,7 +1063,7 @@ class InlineQueryResultPhoto(BaseModel):
     with the specified content instead of the photo.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["photo"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     photo_url: Optional[str] = Field(default=None)
     thumb_url: Optional[str] = Field(default=None)
@@ -1170,7 +1086,7 @@ class InlineQueryResultGif(BaseModel):
     animation.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["gif"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     gif_url: Optional[str] = Field(default=None)
     gif_width: Optional[int] = Field(default=None)
@@ -1196,7 +1112,7 @@ class InlineQueryResultMpeg4Gif(BaseModel):
     specified content instead of the animation.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["mpeg4_gif"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     mpeg4_url: Optional[str] = Field(default=None)
     mpeg4_width: Optional[int] = Field(default=None)
@@ -1224,7 +1140,7 @@ class InlineQueryResultVideo(BaseModel):
     input_message_content.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["video"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     video_url: Optional[str] = Field(default=None)
     mime_type: Optional[Literal["text/html", "video/mp4"]] = Field(default=None)
@@ -1248,7 +1164,7 @@ class InlineQueryResultAudio(BaseModel):
     the specified content instead of the audio.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["audio"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     audio_url: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
@@ -1269,7 +1185,7 @@ class InlineQueryResultVoice(BaseModel):
     the voice message.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["voice"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     voice_url: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
@@ -1289,7 +1205,7 @@ class InlineQueryResultDocument(BaseModel):
     can be sent using this method.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["document"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
     caption: Optional[str] = Field(default=None)
@@ -1314,7 +1230,7 @@ class InlineQueryResultLocation(BaseModel):
     specified content instead of the location.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["location"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     latitude: Optional[float] = Field(default=None)
     longitude: Optional[float] = Field(default=None)
@@ -1337,7 +1253,7 @@ class InlineQueryResultVenue(BaseModel):
     instead of the venue.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["venue"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     latitude: Optional[float] = Field(default=None)
     longitude: Optional[float] = Field(default=None)
@@ -1361,7 +1277,7 @@ class InlineQueryResultContact(BaseModel):
     the specified content instead of the contact.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["contact"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     phone_number: Optional[str] = Field(default=None)
     first_name: Optional[str] = Field(default=None)
@@ -1379,7 +1295,7 @@ class InlineQueryResultGame(BaseModel):
     Represents a Game.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["game"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     game_short_name: Optional[str] = Field(default=None)
     reply_markup: Optional["InlineKeyboardMarkup"] = Field(default=None)
@@ -1393,7 +1309,7 @@ class InlineQueryResultCachedPhoto(BaseModel):
     photo.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["photo"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     photo_file_id: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
@@ -1413,7 +1329,7 @@ class InlineQueryResultCachedGif(BaseModel):
     content instead of the animation.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["gif"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     gif_file_id: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
@@ -1432,7 +1348,7 @@ class InlineQueryResultCachedMpeg4Gif(BaseModel):
     send a message with the specified content instead of the animation.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["mpeg4_gif"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     mpeg4_file_id: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
@@ -1450,7 +1366,7 @@ class InlineQueryResultCachedSticker(BaseModel):
     to send a message with the specified content instead of the sticker.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["sticker"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     sticker_file_id: Optional[str] = Field(default=None)
     reply_markup: Optional["InlineKeyboardMarkup"] = Field(default=None)
@@ -1465,7 +1381,7 @@ class InlineQueryResultCachedDocument(BaseModel):
     file.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["document"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
     document_file_id: Optional[str] = Field(default=None)
@@ -1485,7 +1401,7 @@ class InlineQueryResultCachedVideo(BaseModel):
     the video.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["video"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     video_file_id: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
@@ -1505,7 +1421,7 @@ class InlineQueryResultCachedVoice(BaseModel):
     voice message.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["voice"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     voice_file_id: Optional[str] = Field(default=None)
     title: Optional[str] = Field(default=None)
@@ -1524,7 +1440,7 @@ class InlineQueryResultCachedAudio(BaseModel):
     audio.
     """
 
-    type: Optional[str] = Field(default=None)
+    type: Optional[Literal["audio"]] = Field(default=None)
     id: Optional[str] = Field(default=None)
     audio_file_id: Optional[str] = Field(default=None)
     caption: Optional[str] = Field(default=None)
@@ -1532,22 +1448,6 @@ class InlineQueryResultCachedAudio(BaseModel):
     caption_entities: Optional[List["MessageEntity"]] = Field(default=None)
     reply_markup: Optional["InlineKeyboardMarkup"] = Field(default=None)
     input_message_content: Optional["InputMessageContent"] = Field(default=None)
-
-
-class InputMessageContent(BaseModel):
-    """
-    This object represents the content of a message to be sent as a result of an inline
-    query. Telegram clients currently support the following 5 types:
-    InputTextMessageContent InputLocationMessageContent InputVenueMessageContent
-    InputContactMessageContent InputInvoiceMessageContent
-    """
-
-    class Config:
-        # This model can morph into one of its variants.
-        # Pydantic doesn't support this at the moment,
-        # so this is a workaround. It allows to assign all
-        # attributes to the model without type validation.
-        extra = "allow"
 
 
 class InputTextMessageContent(BaseModel):
@@ -1814,31 +1714,13 @@ class EncryptedCredentials(BaseModel):
     secret: Optional[str] = Field(default=None)
 
 
-class PassportElementError(BaseModel):
-    """
-    This object represents an error in the Telegram Passport element which was submitted
-    that should be resolved by the user. It should be one of:
-    PassportElementErrorDataField PassportElementErrorFrontSide
-    PassportElementErrorReverseSide PassportElementErrorSelfie PassportElementErrorFile
-    PassportElementErrorFiles PassportElementErrorTranslationFile
-    PassportElementErrorTranslationFiles PassportElementErrorUnspecified
-    """
-
-    class Config:
-        # This model can morph into one of its variants.
-        # Pydantic doesn't support this at the moment,
-        # so this is a workaround. It allows to assign all
-        # attributes to the model without type validation.
-        extra = "allow"
-
-
 class PassportElementErrorDataField(BaseModel):
     """
     Represents an issue in one of the data fields that was provided by the user. The
     error is considered resolved when the field's value changes.
     """
 
-    source: Optional[str] = Field(default=None)
+    source: Optional[Literal["data"]] = Field(default=None)
     type: Optional[
         Literal[
             "personal_details",
@@ -1860,7 +1742,7 @@ class PassportElementErrorFrontSide(BaseModel):
     resolved when the file with the front side of the document changes.
     """
 
-    source: Optional[str] = Field(default=None)
+    source: Optional[Literal["front_side"]] = Field(default=None)
     type: Optional[
         Literal["passport", "driver_license", "identity_card", "internal_passport"]
     ] = Field(default=None)
@@ -1874,7 +1756,7 @@ class PassportElementErrorReverseSide(BaseModel):
     resolved when the file with reverse side of the document changes.
     """
 
-    source: Optional[str] = Field(default=None)
+    source: Optional[Literal["reverse_side"]] = Field(default=None)
     type: Optional[Literal["driver_license", "identity_card"]] = Field(default=None)
     file_hash: Optional[str] = Field(default=None)
     message: Optional[str] = Field(default=None)
@@ -1886,7 +1768,7 @@ class PassportElementErrorSelfie(BaseModel):
     resolved when the file with the selfie changes.
     """
 
-    source: Optional[str] = Field(default=None)
+    source: Optional[Literal["selfie"]] = Field(default=None)
     type: Optional[
         Literal["passport", "driver_license", "identity_card", "internal_passport"]
     ] = Field(default=None)
@@ -1900,7 +1782,7 @@ class PassportElementErrorFile(BaseModel):
     file with the document scan changes.
     """
 
-    source: Optional[str] = Field(default=None)
+    source: Optional[Literal["file"]] = Field(default=None)
     type: Optional[
         Literal[
             "utility_bill",
@@ -1920,7 +1802,7 @@ class PassportElementErrorFiles(BaseModel):
     list of files containing the scans changes.
     """
 
-    source: Optional[str] = Field(default=None)
+    source: Optional[Literal["files"]] = Field(default=None)
     type: Optional[
         Literal[
             "utility_bill",
@@ -1940,7 +1822,7 @@ class PassportElementErrorTranslationFile(BaseModel):
     document. The error is considered resolved when the file changes.
     """
 
-    source: Optional[str] = Field(default=None)
+    source: Optional[Literal["translation_file"]] = Field(default=None)
     type: Optional[
         Literal[
             "passport",
@@ -1964,7 +1846,7 @@ class PassportElementErrorTranslationFiles(BaseModel):
     considered resolved when a file with the document translation change.
     """
 
-    source: Optional[str] = Field(default=None)
+    source: Optional[Literal["translation_files"]] = Field(default=None)
     type: Optional[
         Literal[
             "passport",
@@ -1988,7 +1870,7 @@ class PassportElementErrorUnspecified(BaseModel):
     new data is added.
     """
 
-    source: Optional[str] = Field(default=None)
+    source: Optional[Literal["unspecified"]] = Field(default=None)
     type: Optional[str] = Field(default=None)
     element_hash: Optional[str] = Field(default=None)
     message: Optional[str] = Field(default=None)
@@ -2024,6 +1906,110 @@ class GameHighScore(BaseModel):
     position: Optional[int] = Field(default=None)
     user: Optional["User"] = Field(default=None)
     score: Optional[int] = Field(default=None)
+
+
+ChatMember = Annotated[
+    Union[
+        ChatMemberOwner,
+        ChatMemberAdministrator,
+        ChatMemberMember,
+        ChatMemberRestricted,
+        ChatMemberLeft,
+        ChatMemberBanned,
+    ],
+    Field(discriminator="status"),
+]
+
+
+BotCommandScope = Annotated[
+    Union[
+        BotCommandScopeDefault,
+        BotCommandScopeAllPrivateChats,
+        BotCommandScopeAllGroupChats,
+        BotCommandScopeAllChatAdministrators,
+        BotCommandScopeChat,
+        BotCommandScopeChatAdministrators,
+        BotCommandScopeChatMember,
+    ],
+    Field(discriminator="type"),
+]
+
+
+MenuButton = Annotated[
+    Union[
+        MenuButtonCommands,
+        MenuButtonWebApp,
+        MenuButtonDefault,
+    ],
+    Field(discriminator="type"),
+]
+
+
+InputMedia = Annotated[
+    Union[
+        InputMediaAnimation,
+        InputMediaDocument,
+        InputMediaAudio,
+        InputMediaPhoto,
+        InputMediaVideo,
+    ],
+    Field(discriminator="type"),
+]
+
+
+InlineQueryResult = Annotated[
+    Union[
+        InlineQueryResultCachedAudio,
+        InlineQueryResultCachedDocument,
+        InlineQueryResultCachedGif,
+        InlineQueryResultCachedMpeg4Gif,
+        InlineQueryResultCachedPhoto,
+        InlineQueryResultCachedSticker,
+        InlineQueryResultCachedVideo,
+        InlineQueryResultCachedVoice,
+        InlineQueryResultArticle,
+        InlineQueryResultAudio,
+        InlineQueryResultContact,
+        InlineQueryResultGame,
+        InlineQueryResultDocument,
+        InlineQueryResultGif,
+        InlineQueryResultLocation,
+        InlineQueryResultMpeg4Gif,
+        InlineQueryResultPhoto,
+        InlineQueryResultVenue,
+        InlineQueryResultVideo,
+        InlineQueryResultVoice,
+    ],
+    Field(discriminator="type"),
+]
+
+
+InputMessageContent = Annotated[
+    Union[
+        InputTextMessageContent,
+        InputLocationMessageContent,
+        InputVenueMessageContent,
+        InputContactMessageContent,
+        InputInvoiceMessageContent,
+    ],
+    Field(discriminator=None),
+]
+
+
+PassportElementError = Annotated[
+    Union[
+        PassportElementErrorDataField,
+        PassportElementErrorFrontSide,
+        PassportElementErrorReverseSide,
+        PassportElementErrorSelfie,
+        PassportElementErrorFile,
+        PassportElementErrorFiles,
+        PassportElementErrorTranslationFile,
+        PassportElementErrorTranslationFiles,
+        PassportElementErrorUnspecified,
+    ],
+    Field(discriminator="source"),
+]
 
 
 for v in locals().copy().values():
