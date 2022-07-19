@@ -192,6 +192,7 @@ class PollUpdate(BaseBotUpdate, Poll):
 
 __all__ = (
     "BaseBotUpdate",
+    "BotUpdateType",
     "MessageUpdate",
     "CallbackQueryUpdate",
     "InlineQueryUpdate",
