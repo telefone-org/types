@@ -22,12 +22,6 @@ class APIMethods:
         n.update(loc["kwargs"])
         return n
 
-    @staticmethod
-    def get_response(r: dict) -> dict:
-        if "json" in r:
-            r["json_"] = r["json"]
-        return r
-
     async def get_updates(
         self,
         offset: Optional[int] = None,
