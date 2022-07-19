@@ -5,10 +5,7 @@ from pydantic import parse_obj_as
 from telefone_types.objects import *
 
 if TYPE_CHECKING:
-    from telefone.api import ABCAPI, API, File
-
-
-InputFile = TypeVar("InputFile", "File", str)
+    from telefone.api import ABCAPI, API
 
 
 class APIMethods:
@@ -1085,7 +1082,7 @@ class APIMethods:
         object on success.
         """
         response = await self.api.request("getChatMember", self.get_params(locals()))
-        return ChatMember(**response)
+        return parse_obj_as(ChatMember, response)
 
     async def set_chat_sticker_set(
         self,
@@ -1208,7 +1205,7 @@ class APIMethods:
         response = await self.api.request(
             "getChatMenuButton", self.get_params(locals())
         )
-        return MenuButton(**response)
+        return parse_obj_as(MenuButton, response)
 
     async def set_my_default_administrator_rights(
         self,
