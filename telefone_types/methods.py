@@ -5,7 +5,9 @@ from pydantic import parse_obj_as
 from telefone_types.objects import *
 
 if TYPE_CHECKING:
-    from telefone.api import ABCAPI, API
+    from telefone.api import ABCAPI, API, File
+
+InputFile = TypeVar("InputFile", "File", "str")
 
 
 class APIMethods:
