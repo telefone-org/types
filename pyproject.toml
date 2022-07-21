@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "telefone-types"
-version = "6.1.0.4.post1"
+version = "6.1.0.4.post2"
 description = "Types for Telefone framework"
 authors = []
 license = "MIT"
