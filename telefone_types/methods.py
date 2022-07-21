@@ -7,7 +7,7 @@ from telefone_types.objects import *
 if TYPE_CHECKING:
     from telefone.api import ABCAPI, API, File
 
-InputFile = TypeVar("InputFile", "File", "str")
+InputFile = TypeVar("InputFile", "File", str)
 
 
 class APIMethods:
